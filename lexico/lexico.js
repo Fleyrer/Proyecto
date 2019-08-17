@@ -35,11 +35,9 @@ class Lexico
     }
     
     checkNumber()
-    {
-       
+    {  
         var cadena = this.getEntrada();
         var numberOfPoints = 0;
-
         for(var tam = 0 ; tam < cadena.length; tam++)
         {
             if (cadena.charAt(tam) == ".")
@@ -48,7 +46,10 @@ class Lexico
             }
          
         }
-
+        if(cadena.charAt(cadena.length-1) == ".")
+        {
+            return 0;
+        }
         if(cadena.charAt(0) == ".")
         {
             return 0;
@@ -63,6 +64,7 @@ class Lexico
         }
       
     }
+    
     getEntrada()
     {
         return this.entrada;
