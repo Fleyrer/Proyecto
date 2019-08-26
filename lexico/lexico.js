@@ -4,13 +4,14 @@ class Lexico
 {
     constructor(entrada)
     {
-        this.entrada = entrada;
+        this.entrada = this.arrayToString(entrada.split("\n"));
+        console.log(this.entrada);
     }
 
     checkType()
     {
         var cadena = this.getEntrada();
-       
+        
         return isNaN(cadena);
     }
 
@@ -114,7 +115,7 @@ class Lexico
             ||  alto.indexOf('+')  !== -1 || alto.indexOf('-')  !== -1 ||  alto.indexOf('/')  !== -1 ||  alto.indexOf('*')  !== -1 || alto.indexOf('.')  !== -1 
             ||  alto.indexOf(',')  !== -1 || alto.indexOf('^') !== -1 || alto.indexOf('~') !== -1 || alto.indexOf(',') !== -1 
             || alto.indexOf('#') !== -1 || alto.indexOf('!') !== -1 || alto.indexOf('¡') !== -1 || alto.indexOf('?') !== -1 || alto.indexOf('¿') !== -1  
-            || alto.indexOf("'") !== -1)
+            || alto.indexOf("'") !== -1 || alto.indexOf('&') !== -1 || alto.indexOf('"') !== -1)
             {
                return 0;
             }
@@ -165,7 +166,52 @@ class Lexico
         return this.entrada;
     }
 
+    arrayToString(arr)
+    {
+        var str = "";
+        for( var i = 0 ; i < arr.length; i++)
+        {
+            
+           str = str.concat(arr[i] + " ");
+        }
 
+        return str;
+    }
+
+    genera_tabla(data) {
+        // Obtener la referencia del elemento body
+        var body = document.getElementsByTagName("body")[0];
+       
+        // Crea un elemento <table> y un elemento <tbody>
+        var tabla   = document.createElement("table");
+        var tblBody = document.createElement("tbody");
+       
+        // Crea las celdas
+        for (var i = 0; i < data.length-1; i++) {
+          // Crea las hileras de la tabla
+          var hilera = document.createElement("tr");
+       
+          for (var j = 0; j < 3; j++) {
+            // Crea un elemento <td> y un nodo de texto, haz que el nodo de
+            // texto sea el contenido de <td>, ubica el elemento <td> al final
+            // de la hilera de la tabla
+            var celda = document.createElement("td");
+            var textoCelda = document.createTextNode(data[i][j]);
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+          }
+       
+          // agrega la hilera al final de la tabla (al final del elemento tblbody)
+          tblBody.appendChild(hilera);
+        }
+       
+        // posiciona el <tbody> debajo del elemento <table>
+        tabla.appendChild(tblBody);
+        // appends <table> into <body>
+        body.appendChild(tabla);
+        // modifica el atributo "border" de la tabla y lo fija a "2";
+        tabla.setAttribute("border", "2");
+      }
 
 
 }
@@ -176,6 +222,8 @@ function callLexico()
 {
    var lexema = new Lexico(document.getElementById("entrada").value);
    var res = lexema.getEntrada().split(" ");
+   
+   console.log(lexema.getEntrada());
    var tabla = [];
    for(var i =0; i< res.length ; i++)
    {
@@ -185,7 +233,8 @@ function callLexico()
                             tabla[i] = [];
                             tabla[i][0] =  "tipo";
                             tabla[i][1] =  "4";
-                            document.getElementById("salida").value =  document.getElementById("salida").value + "tipo";
+                            tabla[i][2] =  lexema.getEntrada();
+                          
                         }
 
                         else if(lexema.checkSum())
@@ -193,7 +242,8 @@ function callLexico()
                             tabla[i] = [];
                             tabla[i][0] =  "opSuma";
                             tabla[i][1] =  "5";
-                            document.getElementById("salida").value = document.getElementById("salida").value + "opSum";
+                            tabla[i][2] =  lexema.getEntrada();
+                           
                         }
 
                         else if(lexema.checkMul())
@@ -201,14 +251,15 @@ function callLexico()
                             tabla[i] = [];
                             tabla[i][0] =  "opMul";
                             tabla[i][1] =  "6";
-                            document.getElementById("salida").value = document.getElementById("salida").value + "opMul";
+                            tabla[i][2] =  lexema.getEntrada();
+                           
                         }
                         else if(lexema.checkRel())
                         {
                             tabla[i] = [];
                             tabla[i][0] =  "opRelac";
                             tabla[i][1] =  "5";
-                            document.getElementById("salida").value = document.getElementById("salida").value + "opRel";
+                            tabla[i][2] =  lexema.getEntrada();
                         }
 
                         else if(lexema.checkOr())
@@ -216,28 +267,32 @@ function callLexico()
                             tabla[i] = [];
                             tabla[i][0] =  "opOr";
                             tabla[i][1] =  "8";
-                            document.getElementById("salida").value = document.getElementById("salida").value + "opOr";
+                            tabla[i][2] =  lexema.getEntrada();
+                          
                         }
                         else if(lexema.checkNot())
                         {
                             tabla[i] = [];
                             tabla[i][0] =  "opNot";
                             tabla[i][1] =  "10";
-                            document.getElementById("salida").value = document.getElementById("salida").value + "opNot";
+                            tabla[i][2] =  lexema.getEntrada();
+                           
                         }
                         else if(lexema.checkAnd())
                         {
                             tabla[i] = [];
                             tabla[i][0] =  "opAnd";
                             tabla[i][1] =  "9";
-                            document.getElementById("salida").value = document.getElementById("salida").value + "opAnd";
+                            tabla[i][2] =  lexema.getEntrada();
+                            
                         }
                         else if(lexema.checkEq())
                         {
                             tabla[i] = [];
                             tabla[i][0] =  "opIgualdad";
                             tabla[i][1] =  "11";
-                            document.getElementById("salida").value = document.getElementById("salida").value + "opIgualdad";
+                            tabla[i][2] =  lexema.getEntrada();
+                            
                         }
                         else if(lexema.checkNothing())
                         {
@@ -247,57 +302,68 @@ function callLexico()
                             {
                                 case ';':
                                     tabla[i][1] =  "12";
+                                    tabla[i][2] =  lexema.getEntrada();
                                 break;
                                 case ',':
                                     tabla[i][1] =  "13";
+                                    tabla[i][2] =  lexema.getEntrada();
                                 break;
                                 case '(':
                                     tabla[i][1] =  "14";
+                                    tabla[i][2] =  lexema.getEntrada();
                                 break;
                                 case ')':
                                     tabla[i][1] =  "15";
+                                    tabla[i][2] =  lexema.getEntrada();
                                 break;
                                 case '{':
                                     tabla[i][1] =  "16";
+                                    tabla[i][2] =  lexema.getEntrada();
                                 break;
                                 case '}':
                                 tabla[i][1] =  "17";
+                                tabla[i][2] =  lexema.getEntrada();
                                 break;
                                 case '=':
                                 tabla[i][1] =  "18";
+                                tabla[i][2] =  lexema.getEntrada();
                                 break;
                                 case 'if':
                                 tabla[i][1] =  "19";
+                                tabla[i][2] =  lexema.getEntrada();
                                 break;
                                 case 'while':
                                 tabla[i][1] =  "20";
+                                tabla[i][2] =  lexema.getEntrada();
                                 break;
                                 case 'return':
                                 tabla[i][1] =  "21";
+                                tabla[i][2] =  lexema.getEntrada();
                                 break;
                             }
                            
-                            document.getElementById("salida").value = "";
                         }
                         else if(!lexema.checkType())
                         {
                             if(lexema.checkNumber() == 0)
                             {
-                                document.getElementById("salida").value ="Algo salio mal en la entrada";
+                               
                             }
                             if(lexema.checkNumber() == 1)
                             {
                                 tabla[i] = [];
                                 tabla[i][0] =  "entero";
                                 tabla[i][1] =  "1";
-                                document.getElementById("salida").value = document.getElementById("salida").value + "Entero";
+                                tabla[i][2] =  lexema.getEntrada();
+                              
                             }
                             if(lexema.checkNumber() == 2)
                             {
                                 tabla[i] = [];
                                 tabla[i][0] =  "real";
                                 tabla[i][1] =  "2";
-                                document.getElementById("salida").value = document.getElementById("salida").value + "Real";
+                                tabla[i][2] =  lexema.getEntrada();
+                                
                             }
                             
                         }
@@ -313,10 +379,10 @@ function callLexico()
                                 tabla[i] = [];
                                 tabla[i][0] =  "identificador";
                                 tabla[i][1] =  "0";
-                                document.getElementById("salida").value =document.getElementById("salida").value + "identificador";
+                                tabla[i][2] =  lexema.getEntrada();
+                             
                             }
                         }
         }
-        console.log(tabla);
-      
+      lexema.genera_tabla(tabla);
 }
